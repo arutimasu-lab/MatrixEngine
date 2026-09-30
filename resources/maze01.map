@@ -1,0 +1,34 @@
+# maze01.map
+[OBJECTS]
+. = empty
+S = crete_stena_07
+B = orig
+T = table
+C = chair
+P = spawn_player
+
+[MAP]
+S S S S S S S S
+S . . . . . . S
+S . B B . B B S
+S . . . . . . S
+S . B B . B B S
+S . . . . . . S
+S . B B P B B S
+S S S S S S S S
+#S P S S S S S S S S S S S S S
+#V . . . V . . . . . V . . . V
+#H . H . V . H H H . V . H . H
+#V . V . . . H . V . . . V . V
+#H . V H H H H . V H H H V . H
+#V . . . . . . . . . . . . . V
+#H H H . H H H H H H H . H H H
+#V . . . H . . . . . H . . . V
+#H . H H H . H H H . H H H . H
+#V . H . . . H . . . . . H . V
+#H . H . H H H . H H H . H . H
+#V . . . H . . . H . . . . . V
+#H H H H H . H H H . H H H H H
+#V . . . . . H . . . H . . . V
+#S S S S S S S S   S S S S S S
+
