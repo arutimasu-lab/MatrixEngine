@@ -1,6 +1,5 @@
 #pragma once
 // TextureManager.h
-#pragma once
 #include "Texture.h"
 #include <map>
 #include <string>
@@ -12,6 +11,6 @@ public:
     Texture* get(const std::string& path);
 
 private:
-    TextureManager() {}
+    TextureManager() = default;//{}
     std::map<std::string, Texture*> cache;
 };

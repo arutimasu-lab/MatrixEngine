@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "engine\\Debug\\Map.obj",
+            "outputs": [
+                "engine\\Debug\\Map.h.obj.dt.module.json",
+                "engine\\Debug\\Map.h.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

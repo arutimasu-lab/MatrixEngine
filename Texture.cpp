@@ -33,41 +33,29 @@ Texture::~Texture() {
 
 bool Texture::load(const char* path) {
     std::ifstream file(path, std::ios::binary);
-    if (!file.is_open()) {
-        std::cerr << "Не удалось открыть текстуру: " << path << std::endl;
-        return false;
-    }
+    if (!file.is_open()) return false;
 
     TGAHeader header;
     file.read(reinterpret_cast<char*>(&header), sizeof(TGAHeader));
 
-    // Поддерживаем только несжатые TrueColor (24/32 бита)
     if (header.imageType != 2) {
-        std::cerr << "Поддерживается только несжатый TGA (imageType=2): " << path << std::endl;
+        std::cerr << "Только uncompressed TGA (imageType=2)" << std::endl;
         return false;
     }
 
     width = header.width;
     height = header.height;
-    int bpp = header.pixelDepth / 8; // 3 или 4 байта на пиксель
+    int bpp = header.pixelDepth / 8;
 
-    // Пропускаем ID-секцию, если есть
-    if (header.idLength > 0) {
-        file.seekg(header.idLength, std::ios::cur);
-    }
+    if (header.idLength > 0) file.seekg(header.idLength, std::ios::cur);
 
     std::vector<unsigned char> data(width * height * bpp);
     file.read(reinterpret_cast<char*>(data.data()), data.size());
     file.close();
 
-    // TGA хранит пиксели в BGR(A), OpenGL ждёт RGB(A) — конвертируем
+    // BGR(A) -> RGB(A)
     for (int i = 0; i < width * height; i++) {
-        unsigned char b = data[i * bpp + 0];
-        unsigned char g = data[i * bpp + 1];
-        unsigned char r = data[i * bpp + 2];
-        data[i * bpp + 0] = r;
-        data[i * bpp + 1] = g;
-        data[i * bpp + 2] = b;
+        std::swap(data[i * bpp + 0], data[i * bpp + 2]);
     }
 
     GLenum format = (bpp == 4) ? GL_RGBA : GL_RGB;
@@ -75,18 +63,30 @@ bool Texture::load(const char* path) {
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
 
+    // --- ФИЛЬТРАЦИЯ ---
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    // --- АНИЗОТРОПИЯ ---
+    if (GLEW_EXT_texture_filter_anisotropic) {
+        GLfloat maxAniso = 0.0f;
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);
+        fprintf(stderr, "Aniso: %.1fx\n", maxAniso);
+    }
+
+    // --- ЗАГРУЗКА ---
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0,
         format, GL_UNSIGNED_BYTE, data.data());
 
-    // Мипмапы — обязательно, иначе дальние стены будут "шумными"
+    // --- МИПМАПЫ ---
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    fprintf(stderr, "Texture loaded: %dx%d\n", width, height);
     loaded = true;
     return true;
 }

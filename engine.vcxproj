@@ -148,6 +148,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Prism.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stb_image_write.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Prism.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />

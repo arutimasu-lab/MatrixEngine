@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "engine\\Debug\\Camera.obj",
+            "outputs": [
+                "engine\\Debug\\Camera.h.obj.dt.module.json",
+                "engine\\Debug\\Camera.h.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

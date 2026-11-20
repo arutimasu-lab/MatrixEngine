@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -7,7 +6,6 @@
 class ShaderProgram {
 public:
     ShaderProgram();
-    ~ShaderProgram();
 
     bool loadFromFiles(const char* vertPath, const char* fragPath);
     void use() const;

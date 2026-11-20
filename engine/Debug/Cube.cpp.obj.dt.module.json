@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "engine\\Debug\\Cube.obj",
+            "outputs": [
+                "engine\\Debug\\Cube.cpp.obj.dt.module.json",
+                "engine\\Debug\\Cube.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

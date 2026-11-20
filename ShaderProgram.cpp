@@ -4,11 +4,11 @@
 #include <sstream>
 #include <iostream>
 
-ShaderProgram::ShaderProgram() {}
+ShaderProgram::ShaderProgram() = default;//{}
 
-ShaderProgram::~ShaderProgram() {
+/*ShaderProgram::~ShaderProgram() {
     destroy();
-}
+}*/
 
 std::string ShaderProgram::readFile(const char* path) {
     std::ifstream f(path);

@@ -1,32 +1,61 @@
 #pragma once
-#include <vector>
-using namespace std;
 
-struct Vertex {
+#include <string>
+#include <vector>
+#include <map>
+
+struct Vertex
+{
     float x, y, z;
 };
 
-struct Face {
-    vector<int> vertexIndices;
+struct TexCoord
+{
+    float u, v;
 };
 
-class Model {
+struct Material
+{
+    std::string name;
+
+    float r = 1.0f;
+    float g = 1.0f;
+    float b = 1.0f;
+
+    unsigned int texture = 0;
+};
+
+struct Face
+{
+    std::vector<int> vertexIndices;
+    std::vector<int> texCoordIndices;
+
+    int materialIndex = -1;
+};
+
+class Model
+{
 public:
-    Model(int x, int y, int z) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    float x;
+    float y;
+    float z;
+
+    Model(float px, float py, float pz)
+        : x(px), y(py), z(pz)
+    {
     }
+
     bool loadOBJ(const char* path);
     void render();
+
 private:
-    int x, y, z;
-    vector<Vertex> vertices;
-    vector<Face> faces;
-};
+    bool loadMTL(const std::string& path);
+    unsigned int loadTexture(const std::string& path);
 
+    std::vector<Vertex> vertices;
+    std::vector<TexCoord> texCoords;
+    std::vector<Face> faces;
 
-//void renderCube(int x, int y, int z);
-//void renderModel();
-//void renderLandscape();
-//bool loadOBJ(const char* path);
+    std::vector<Material> materials;
+    std::map<std::string, int> materialMap;
+};;

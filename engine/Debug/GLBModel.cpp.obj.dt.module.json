@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "engine\\Debug\\GLBModel.obj",
+            "outputs": [
+                "engine\\Debug\\GLBModel.cpp.obj.dt.module.json",
+                "engine\\Debug\\GLBModel.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

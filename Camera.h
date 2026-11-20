@@ -20,6 +20,7 @@ public:
 
     float getX() const { return x; }
     float getZ() const { return z; }
+    float getY() const { return y; }
     void tryMove(float dx, float dz, const Level& map, float radius);
 
     void getForwardDelta(float distance, float& dx, float& dz) const;

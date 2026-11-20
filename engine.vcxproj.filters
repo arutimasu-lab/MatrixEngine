@@ -95,6 +95,9 @@
     <ClInclude Include="ShaderProgram.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="Prism.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +143,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Prism.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

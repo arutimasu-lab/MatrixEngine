@@ -1,22 +1,138 @@
-// Map.h
 #pragma once
+
 #include <vector>
 #include <string>
 #include <map>
 
-struct Level {
-    std::map<char, std::string> objects;      // 'H' -> "wall_stone_h"
-    std::vector<std::vector<char>> cells;     // матрица символов
+// ============================================================
+// Объект-модель, автоматически найденный на карте
+// ============================================================
+
+struct LevelObject
+{
+    // Символ объекта на карте
+    // Например: 'T'
+    char code = '.';
+
+    // Путь к OBJ
+    // Например: "table.obj"
+    std::string modelPath;
+
+    // Мировая позиция
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+
+    // Настройки модели
+    float rotationY = 0.0f;
+    float scale = 1.0f;
+};
+
+
+// ============================================================
+// Уровень
+// ============================================================
+
+struct Level
+{
+    // --------------------------------------------------------
+    // Текстурные объекты / стены
+    //
+    // Например:
+    // 'H' -> "wall_stone_h"
+    // 'V' -> "wall_stone_v"
+    //
+    // Старую систему стен не меняем.
+    // --------------------------------------------------------
+
+    std::map<char, std::string> objects;
+
+
+    // --------------------------------------------------------
+    // OBJ-модели
+    //
+    // Например:
+    // 'T' -> "table.obj"
+    // 'C' -> "chair.obj"
+    // --------------------------------------------------------
+
+    std::map<char, std::string> models;
+
+
+    // --------------------------------------------------------
+    // Матрица карты
+    // --------------------------------------------------------
+
+    std::vector<std::vector<char>> cells;
+
+    // НОВОЕ: слой дороги
+    std::vector<std::vector<char>> roadCells;
+
+    // --------------------------------------------------------
+    // OBJ-модели, реально расставленные на карте
+    // --------------------------------------------------------
+
+    std::vector<LevelObject> placedObjects;
+
+
+    // --------------------------------------------------------
+    // Размер одной клетки мира
+    // --------------------------------------------------------
+
     float gridSize = 2.0f;
+
+
+    // --------------------------------------------------------
+    // Позиция игрока
+    // --------------------------------------------------------
+
     int spawnI = -1;
     int spawnJ = -1;
 
-    bool isSolid(int i, int j) const {
-        if (i < 0 || j < 0) return true;
-        if (i >= (int)cells.size()) return true;
-        if (j >= (int)cells[i].size()) return true;
+    // НОВОЕ: спавн машины
+    int carSpawnI = -1;
+    int carSpawnJ = -1;
+
+    // Проверка: дорога в клетке?
+    bool isRoad(int i, int j) const {
+        if (i < 0 || j < 0) return false;
+        if (i >= (int)roadCells.size()) return false;
+        if (j >= (int)roadCells[i].size()) return false;
+        return roadCells[i][j] != '.';
+    }
+
+    // --------------------------------------------------------
+    // Проверка клетки на препятствие
+    //
+    // Любой символ кроме '.' считается препятствием.
+    //
+    // Поэтому:
+    //
+    // H = стена
+    // T = стол
+    // C = стул
+    //
+    // тоже блокируют игрока.
+    // --------------------------------------------------------
+
+    bool isSolid(int i, int j) const
+    {
+        if (i < 0 || j < 0)
+            return true;
+
+        if (i >= (int)cells.size())
+            return true;
+
+        if (j >= (int)cells[i].size())
+            return true;
+
         return cells[i][j] != '.';
     }
+
+
+    // --------------------------------------------------------
+    // Проверка препятствия по мировым координатам
+    // --------------------------------------------------------
 
     bool isSolidAtWorld(float x, float z) const {
         int i = (int)(x / gridSize);
@@ -24,12 +140,23 @@ struct Level {
         return isSolid(i, j);
     }
 
-    bool collidesWithRadius(float x, float z, float radius) const {
+
+    // --------------------------------------------------------
+    // Проверка столкновения игрока с радиусом
+    // --------------------------------------------------------
+
+    bool collidesWithRadius(float x, float z, float radius) const
+    {
         return isSolidAtWorld(x - radius, z - radius)
             || isSolidAtWorld(x + radius, z - radius)
             || isSolidAtWorld(x - radius, z + radius)
             || isSolidAtWorld(x + radius, z + radius);
     }
 };
+
+
+// ============================================================
+// Загрузка карты
+// ============================================================
 
 bool loadMap(const char* path, Level& outLevel);
